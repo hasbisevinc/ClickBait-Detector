@@ -1,0 +1,10 @@
+cryptography<2.2 # necessary to enable openssl on heroku
+Flask
+regex
+gunicorn
+nltk
+requests
+pandas
+numpy
+sklearn
+flask-cors

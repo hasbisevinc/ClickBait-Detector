@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script>
+function httpGet(url)
+{
+    var title = document.getElementById("fname").value
+    var body = document.getElementById("subject").value
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", url, true);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
+    xhr.send("title="+title+"&body="+body);
+    xhr.onreadystatechange = function() { 
+        if (xhr.readyState == 4 && xhr.status == 200) {
+            console.log(xhr.responseText);
+            result = document.getElementById("result")
+            result.style.display= 'block'
+            if (xhr.responseText == "1") {
+                result.innerHTML = "<h2>I think it is a<h1>Clickbait!!!</h1></h2>" 
+                result.style.backgroundColor= '#e74c3c'
+            }
+            else if (xhr.responseText == "0") {
+                result.innerHTML = "Result:<h2><b>Not a clickbait :)</h2>" 
+                result.style.backgroundColor= '#27ae60'
+            }
+            else {
+                result.innerHTML = "<h2>Sorry, There is a problem on server</h2>" 
+                result.style.backgroundColor= '#f39c12'
+            }
+        }
+    }
+}
+
+var check = function() {
+    httpGet("https://clickbaitdetection.herokuapp.com/classify.ai")
+}
+
+window.onload = function(){
+    
+};
+
+</script>
+<style>
+body {font-family: Arial, Helvetica, sans-serif;}
+* {box-sizing: border-box;}
+
+input[type=text], select, textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  margin-top: 6px;
+  margin-bottom: 16px;
+  resize: vertical;
+}
+
+input[type=submit] {
+  background-color: #4CAF50;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+input[type=submit]:hover {
+  background-color: #45a049;
+}
+
+.container {
+  border-radius: 5px;
+  background-color: #f2f2f2;
+  padding: 20px;
+}
+
+.result {
+  border-radius: 5px;
+  background-color: #f2f2f2;
+  padding: 20px;
+  margin: 20px;
+  display:none;
+}
+
+.code {
+  height:400px;
+}
+</style>
+</head>
+<body>
+
+<h1>ClickBait Detector</h1>
+<p>Enter article's title and body text, our IA will classify it is a click-bait or not</p>
+
+<div class="result" id="result">
+
+</div>
+
+<div class="container">
+    <h1>Example Request</h1>
+    <label for="fname">Title</label>
+    <input type="text" id="fname" name="title" value="Brexit: Second Commons defeat for Theresa May in 24 hours" placeholder="Your name..">
+
+    <label for="lname">Paragraph</label>
+    <textarea id="subject" name="body" placeholder="Write something.." style="height:200px">
+Rebel Conservative MPs have joined forces with Labour to inflict a fresh blow on Theresa May's government in a Commons Brexit vote.
+
+It means the government will have to come up with revised plans within three days if Mrs May's EU withdrawal deal is rejected by MPs next week.
+
+It could also open the door to alternatives, such as a referendum.
+
+No 10 said Mrs May's deal was in the national interest but if MPs disagreed, the government would "respond quickly".
+
+The setback for the PM came as MPs started five days of debate on the withdrawal agreement with the EU, and the framework for future relations, ahead of the meaningful vote next Tuesday.
+
+The government was expecting to have 21 days to come up with a "plan B" for Brexit if, as widely expected, Mrs May's deal is voted down.
+
+How voters want Brexit to be sorted out
+Activists urge Corbyn to back EU referendum
+Bercow Brexit ruling 'extremely concerning'
+Brexit: A really simple guide
+But MPs backed calls for it to respond within three working Parliamentary days, a deadline likely to fall on Monday 21 January.
+
+Theresa May lost by 11 votes, with 297 MPs siding with the government and 308 against.
+</textarea>
+
+    <input type="submit" onclick="check()" value="Submit">
+</div>
+
+<div class="container" style="margin-top:25px">
+    <h1>Example js code</h1>
+    <textarea class="code">
+    var title = document.getElementById("fname").value
+    var body = document.getElementById("subject").value
+
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "https://clickbaitdetection.herokuapp.com/classify.ai", true);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
+    xhr.send("title="+title+"&body="+body);
+
+    xhr.onreadystatechange = function() { 
+        if (xhr.readyState == 4 && xhr.status == 200) {
+            console.log(xhr.responseText);
+            result = document.getElementById("result")
+            result.style.visibility= 'visible'
+            if (xhr.responseText == "1") {
+                //clicbait
+            }
+            else if (xhr.responseText == "0") {
+                //non-clickbait
+            }
+            else {
+                //server error
+            }
+        }
+    }
+    </textarea>
+</div>
+
+</body>
+</html>
+
